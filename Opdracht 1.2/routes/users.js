@@ -1,38 +1,19 @@
-const express = require('express');
-const router = express.Router();
-const dbo = require('../services/database');
- 
-router.route('/').get((req, res) => {
-    dbo.getDb().then(db => {
-      db.collection("users")
-        .find({}).limit(50)
-        .toArray(function (err, result) {
+const express = require('express')
+const router = express.Router()
 
-          if (err) {
-            res.status(400).send("Error fetching users!");
+const { db } = require('../services/database')
 
-          } else {
-              res.json(result);
-          }
-        });
-      }
-    );
-  })
+/* GET users listing. */
 
-  .post((req, res) => {
-    dbo.getDb().then(db => {
-      db.collection("users")
-      .insertOne(req.body, function (err, result) {
+router.get('/', async function (req, res, next) {
+  const users = await db.collection('users').find().toArray()
+  res.json(users)
+})
 
-        if (err) {
-          res.status(400).send("Error inserting user!");
+router.post('/', function (req, res, next) {
+  db.collection('users').insertOne(req.body)
+    .then((user) => res.status(201).json({ id: user.insertedId }))
+    .catch(err => res.status(500).json(err))
+})
 
-        } else {
-          console.log('id', result.insertedId);
-          res.status(204).send();
-        }
-      });
-    });
-  });
- 
-module.exports = router; 
+module.exports = router

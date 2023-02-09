@@ -1,39 +1,14 @@
-const { MongoClient } = require("mongodb");
-
-// Connection URI
-const uri = "mongodb://localhost:27017";
+const { MongoClient } = require('mongodb')
+const uri = process.env.MONGO_URL
 
 const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-
-let dbConnection;
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  family: 4
+})
+const db = client.db(process.env.DB_NAME)
 
 module.exports = {
-    client: client,
-    getDb: async function () {
-
-        return new Promise((resolve, reject) => {
-
-            if (!dbConnection) {
-                console.log('Opening connection');
-
-                client.connect(function (err, db) {
-                    console.log('testing');
-                    if (err || !db) {
-                        reject(err);
-                    }
-
-                    dbConnection = db.db("myapp");
-                    console.log("Successfully connected to MongoDB.");
-                    resolve(dbConnection);
-                });
-
-            } else {
-                resolve(dbConnection);
-            }
-
-        });
-    }
-};
+  db,
+  client
+}
