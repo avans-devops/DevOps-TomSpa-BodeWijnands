@@ -1,24 +1,28 @@
+const { ExpectationFailed } = require('http-errors');
 const request = require('supertest')
 const app = require('../../app')
-const { db, client } = require('../../services/database')
+const dbo = require('../../services/database');
+
 
 describe('Get Users', () => {
+
   beforeEach(async () => {
-    await db.collection('users').deleteMany({})
-  })
+    await dbo.getDb().then(db => db.collection('users').deleteMany({}));
+  });
 
-  afterAll(async () => {
-    client.close()
-  })
+  afterAll(async() => {
+    dbo.client.close();
+  });
 
-  it('should get all users in array', async () => {
-    const expected = { foo: 'bar' }
-    await db.collection('users').insertOne(expected)
-    delete expected._id
-
+  it('should get all users in empty array', async () => {
+    const expected = { 'foo': 'bar' };
+    await dbo.getDb().then(db => db.collection('users').insertOne(expected));
     const res = await request(app).get('/users')
+
     expect(res.statusCode).toEqual(200)
-    expect(res.body.length).toEqual(1)
-    expect(res.body[0]).toEqual(expect.objectContaining(expected))
-  })
-})
+    expect(res.body.length).toEqual(1);
+
+    expected._id = expected._id.toString();
+    expect(res.body[0]).toMatchObject(expected);
+  });
+});
