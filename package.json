@@ -6,7 +6,7 @@
     "start": "node -r dotenv/config ./bin/www",
     "test": "jest",
     "lint": "npx eslint .",
-    "dev": "nodemon -r dotenv/config ./bin/www"
+    "dev": "nodemon -r dotenv/config ./bin/www --legacy-watch"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
