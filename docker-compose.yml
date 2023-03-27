@@ -1,0 +1,21 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  mongodb:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./databasefiles:/data/db
+    restart: always
+
+  expressapp:
+    build: ./expressApi
+    ports: 
+      - "3000:3000"
+    volumes:
+      - /expressApi
+    depends_on:
+      - "mongodb"

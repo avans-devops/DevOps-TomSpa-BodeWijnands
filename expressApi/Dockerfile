@@ -11,7 +11,7 @@ COPY . .
 
 ENV DB_HOST="mongo"
 ENV DB_PORT="27017"
-ENV MONGO_URL="mongodb://mongodb:27017"
+ENV MONGO_URL="mongodb://admin:password@mongodb:27017/myapp?authSource=admin"
 
 CMD ["npm", "run", "dev"]
 
