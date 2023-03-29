@@ -4,9 +4,6 @@ version: '3'
 services:
   mongodb:
     image: mongo:5.0.15
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - ./databasefiles:/data/db
     restart: always
@@ -14,8 +11,26 @@ services:
   expressapp:
     build: ./expressApi
     ports: 
-      - "3000:3000"
+      - "5000:5000"
     volumes:
       - /expressApi
     depends_on:
       - "mongodb"
+  
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    ports:
+      - 9090:9090
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+
+  grafana:
+    build: ./grafana
+    ports:
+      - 3000:3000
+      
+volumes:
+  prometheus-data:
+

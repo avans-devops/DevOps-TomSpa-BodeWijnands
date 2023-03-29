@@ -9,6 +9,20 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+const promBundle = require('express-prom-bundle');
+const metricsMiddleware = promBundle({
+	includePath: true,
+	includeStatusCode: true,
+	normalizePath: true,
+	promClient: {
+		collectDefaultMetrics: {}
+	}
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(metricsMiddleware); // enable Metrics middleware
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
