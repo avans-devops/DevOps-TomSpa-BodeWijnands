@@ -1,0 +1,46 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  mongodb:
+    image: mongo:5.0.15
+    volumes:
+      - ./databasefiles:/data/db
+    restart: always
+
+  expressapp:
+    build: ./expressApi
+    ports: 
+      - "5000:5000"
+    volumes:
+      - /expressApi
+    depends_on:
+      - "mongodb"
+
+  db-exporter:
+    image: bitnami/mongodb-exporter:latest
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017"
+    restart: always
+    ports:
+      - 9216:9216
+    depends_on:
+      - mongodb
+  
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    ports:
+      - 9090:9090
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+
+  grafana:
+    build: ./grafana
+    ports:
+      - 3000:3000
+      
+volumes:
+  prometheus-data:
+
