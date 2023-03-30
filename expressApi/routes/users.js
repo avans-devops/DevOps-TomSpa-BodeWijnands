@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const dbo = require('../services/database');
 
+router.get('/slow', function(req, res, next) {
+  setTimeout(() => {
+    res.send('Slowly respond with a resource');
+  }, 3000);
+});
+
 router.route('/').get((req, res) => {
   dbo.getDb().then(db => {
     const users = db.collection('users');
