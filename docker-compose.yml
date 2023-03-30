@@ -16,6 +16,16 @@ services:
       - /expressApi
     depends_on:
       - "mongodb"
+
+  db-exporter:
+    image: bitnami/mongodb-exporter:latest
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017"
+    restart: always
+    ports:
+      - 9216:9216
+    depends_on:
+      - mongodb
   
   prometheus:
     image: prom/prometheus:latest

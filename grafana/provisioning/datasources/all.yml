@@ -7,3 +7,12 @@ datasources:
     is_default: true
     version: 1
     editable: true
+
+  - name: 'Prometheus'
+    type: 'prometheus'
+    access: 'proxy'
+    org_id: 1
+    url: 'http://db-exporter:9216'
+    is_default: false
+    version: 1
+    editable: true
