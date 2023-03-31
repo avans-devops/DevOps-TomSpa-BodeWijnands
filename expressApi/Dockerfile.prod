@@ -14,4 +14,4 @@ ENV MONGO_URL="mongodb://mongodb:27017"
 
 CMD ["npm", "start"]
 
-EXPOSE 3000
+EXPOSE 5000
