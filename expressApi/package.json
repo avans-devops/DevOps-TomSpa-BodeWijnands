@@ -28,6 +28,7 @@
     "supertest": "^6.3.3"
   },
   "jest": {
+    "preset": "@shelf/jest-mongodb",
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
