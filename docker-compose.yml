@@ -14,7 +14,7 @@ services:
 
   expressapp:
     build: ./expressApi
-    ports: 
+    ports:
       - 5000:5000
     environment:
       - MONGO_URL=mongodb://mongodb:27017
@@ -25,6 +25,17 @@ services:
     depends_on:
       - "mongodb"
 
+  publisherservice:
+    build: ./publisherservice
+    restart: always
+    ports:
+      - 5001:5001
+    environment:
+      - PORT=5001
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      - "rabbitmq"
+
   db-exporter:
     image: bitnami/mongodb-exporter:latest
     environment:
@@ -34,7 +45,7 @@ services:
       - 9216:9216
     depends_on:
       - mongodb
-  
+
   prometheus:
     image: prom/prometheus:latest
     volumes:
@@ -48,7 +59,16 @@ services:
     build: ./grafana
     ports:
       - 3000:3000
-      
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmqdata:/var/lib/rabbitmq/mnesia
+
 volumes:
   prometheus-data:
 
