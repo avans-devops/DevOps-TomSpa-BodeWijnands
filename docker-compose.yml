@@ -13,7 +13,7 @@ services:
   expressapp:
     build: ./expressApi
     ports: 
-      - 5000:5000
+      - 5000:3000
     volumes:
       - /expressApi
     depends_on:
