@@ -1,5 +1,5 @@
 let express = require('express');
-const publisher = require('../helpers/publisher')
+const publisher = require('../service/publisher')
 let router = express.Router();
 
 router.post('/', async function(req, res, next) {
