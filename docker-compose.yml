@@ -1,38 +1,28 @@
 version: '3'
 
 services:
-  consumerdb:
+  mongodb:
     image: mongo:5.0.15
     ports:
       - 27017:27017
     volumes:
-      - ./databasefiles/consumer:/data/db
+      - ./mongodbfiles:/data/db
     restart: always
     expose:
       - 27017
-
-  publisherdb:
-    image: mongo:5.0.15
-    ports:
-      - 27018:27017
-    volumes:
-      - ./databasefiles/publisher:/data/db
-    restart: always
-    expose:
-      - 27018
 
   expressapp:
     build: ./expressApi
     ports:
       - 5000:5000
     environment:
-      - MONGO_URL=mongodb://consumerdb:27017
+      - MONGO_URL=mongodb://mongodb:27017
       - DB_NAME=mydb
       - PORT=5000
     volumes:
       - /expressApi
     depends_on:
-      - consumerdb
+      - mongodb
 
   publisherservice:
     build: ./publisherservice
@@ -42,19 +32,37 @@ services:
     environment:
       - PORT=5001
       - RABBITMQ_URL=amqp://rabbitmq:5672
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=publishermsgs
+      - RABBITMQ_EXCHANGE=messages
     depends_on:
       - rabbitmq
-      - publisherdb
+      - mongodb
+
+  consumerservice:
+    build: ./consumerservice
+    restart: always
+    ports:
+      - 5002:5002
+    environment:
+      - PORT=5002
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=consumermsgs
+      - RABBITMQ_EXCHANGE=messages
+    depends_on:
+      - rabbitmq
+      - mongodb
 
   db-exporter:
     image: bitnami/mongodb-exporter:latest
     environment:
-      MONGODB_URI: consumerdb://mongo:27017
+      - MONGODB_URI= mongodb://mongodb:27017
     restart: always
     ports:
       - 9216:9216
     depends_on:
-      - consumerdb
+      - mongodb
 
   prometheus:
     image: prom/prometheus:latest

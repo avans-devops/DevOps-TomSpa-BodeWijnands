@@ -120,5 +120,5 @@ dist
 
 # Database volume
 
-databaseFiles/*
+mongodbfiles
 rabbitmqdata

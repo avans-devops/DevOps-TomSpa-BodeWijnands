@@ -4,6 +4,7 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 dotenv.config()
+require('./model/message')
 
 let indexRouter = require('./routes/index');
 
