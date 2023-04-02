@@ -15,7 +15,7 @@ describe('Get Results', () => {
 
   beforeEach(async () => {
     db = await connectToDatabase();
-    await db.collection(process.env.DB_NAME).deleteMany({});
+    await db.collection('publishermsgs').deleteMany({});
   });
 
   afterEach(async () => {
@@ -24,7 +24,7 @@ describe('Get Results', () => {
 
   it('should get all results in array', async () => {
     const expected = { 'msg': 'bar' };
-    await db.collection(process.env.DB_NAME).insertOne(expected);
+    await db.collection('publishermsgs').insertOne(expected);
     delete expected._id;
     const res = await request(app).get('/');
     expect(res.statusCode).toEqual(200);
