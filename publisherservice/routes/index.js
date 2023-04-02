@@ -10,7 +10,7 @@ router.post('/', async function(req, res) {
   try {
     await publisher(message);
     if (!db) db = await connectToDatabase()
-    await db.collection(process.env.DB_NAME).insertOne(message)
+    await db.collection('publishermsgs').insertOne(message)
 
     res.send(`Message "${JSON.stringify(message)}" sent`);
   } catch (error) {
@@ -21,7 +21,7 @@ router.post('/', async function(req, res) {
 
 router.get('/', async function(req, res) {
   if (!db) { db = await connectToDatabase() }
-  let msgs = await db.collection(process.env.DB_NAME).find().toArray();
+  let msgs = await db.collection('publishermsgs').find().toArray();
   res.json( msgs);
 });
 
