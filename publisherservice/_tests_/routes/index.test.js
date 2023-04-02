@@ -1,15 +1,26 @@
 const request = require('supertest');
 const app = require('../../app');
-const connectToDb = require('../../services/database');
+const { connectToDatabase, client } = require('../../services/database');
 require("dotenv").config();
+
+jest.mock('../../services/publisher', () => {
+  const publisher = async (msg) => {
+    console.log(msg);
+  }
+  return { publisher }
+})
 
 describe('Get Results', () => {
   let db;
 
   beforeEach(async () => {
-    db = await connectToDb();
+    db = await connectToDatabase();
     await db.collection(process.env.DB_NAME).deleteMany({});
   });
+
+  afterEach(async () => {
+    await client.close()
+  })
 
   it('should get all results in array', async () => {
     const expected = { 'msg': 'bar' };

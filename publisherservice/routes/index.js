@@ -1,7 +1,7 @@
 let express = require('express')
 const publisher = require('../services/publisher')
 let router = express.Router()
-let dbConnection = require('../services/database')
+let { connectToDatabase }  = require('../services/database')
 let db;
 
 router.post('/', async function(req, res) {
@@ -9,7 +9,7 @@ router.post('/', async function(req, res) {
 
   try {
     await publisher(message);
-    if (!db) db = await dbConnection()
+    if (!db) db = await connectToDatabase()
     await db.collection(process.env.DB_NAME).insertOne(message)
 
     res.send(`Message "${JSON.stringify(message)}" sent`);
@@ -20,7 +20,7 @@ router.post('/', async function(req, res) {
 });
 
 router.get('/', async function(req, res) {
-  if (!db) { db = await dbConnection() }
+  if (!db) { db = await connectToDatabase() }
   let msgs = await db.collection(process.env.DB_NAME).find().toArray();
   res.json( msgs);
 });
