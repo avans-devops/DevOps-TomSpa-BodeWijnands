@@ -2,5 +2,5 @@
 devops-2223-BodeWijnands created by GitHub Classroom
 
 ![ExpressApi](https://github.com/avans-devops/DevOps-TomSpa-BodeWijnands/actions/workflows/CI-API.yml/badge.svg)
-![Consumer](https://github.com/avans-devops/DevOps-TomSpa-BodeWijnands/actions/workflows/CI-Consumer.yml/badge.svg)
-![Publisher](https://github.com/avans-devops/DevOps-TomSpa-BodeWijnands/actions/workflows/CI-Publisher.yml/badge.svg)
+[![Node.js CI-Consumer](https://github.com/avans-devops/DevOps-TomSpa-BodeWijnands/actions/workflows/CI-consumer.yml/badge.svg)](https://github.com/avans-devops/DevOps-TomSpa-BodeWijnands/actions/workflows/CI-consumer.yml)
+[![Node.js CI-Publisher](https://github.com/avans-devops/DevOps-TomSpa-BodeWijnands/actions/workflows/CI-publisher.yml/badge.svg)](https://github.com/avans-devops/DevOps-TomSpa-BodeWijnands/actions/workflows/CI-publisher.yml)
