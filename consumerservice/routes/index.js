@@ -1,19 +1,19 @@
 let express = require('express')
-const { msgConsumer } = require('../service/consumer.js')
+const { msgConsumer } = require('../services/consumer.js')
 let router = express.Router()
-let dbConnection = require('../service/database')
+let { connectToDatabase }  = require('../services/database')
 let db
 
 router.get('/', async function(req, res) {
-  if (!db) { db = await dbConnection() }
-  let msgs = await db.collection(process.env.DB_NAME).find().toArray();
+  if (!db) db = await connectToDatabase();
+  let msgs = await db.collection('consumermsgs').find().toArray();
   res.json( msgs);
 });
 
 msgConsumer(async (msg) => {
   try {
-    if (!db) { db = await dbConnection() }
-    await db.collection(process.env.DB_NAME).insertOne(msg)
+    if (!db) db = await connectToDatabase();
+    await db.collection('consumermsgs').insertOne(msg)
 
     console.log(`Message "${JSON.stringify(msg)}" sent`);
   } catch (error) {
