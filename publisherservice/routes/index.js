@@ -1,10 +1,10 @@
 let express = require('express')
-const publisher = require('../service/publisher')
+const publisher = require('../services/publisher')
 let router = express.Router()
-let dbConnection = require('../service/database')
+let dbConnection = require('../services/database')
 let db;
 
-router.post('/', async function(req, res, next) {
+router.post('/', async function(req, res) {
   const message = req.body
 
   try {
@@ -19,7 +19,7 @@ router.post('/', async function(req, res, next) {
   }
 });
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function(req, res) {
   if (!db) { db = await dbConnection() }
   let msgs = await db.collection(process.env.DB_NAME).find().toArray();
   res.json( msgs);

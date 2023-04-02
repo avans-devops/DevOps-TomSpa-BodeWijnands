@@ -4,7 +4,7 @@ let router = express.Router()
 let dbConnection = require('../service/database')
 let db
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function(req, res) {
   if (!db) { db = await dbConnection() }
   let msgs = await db.collection(process.env.DB_NAME).find().toArray();
   res.json( msgs);
