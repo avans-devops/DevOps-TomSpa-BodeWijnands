@@ -9,10 +9,10 @@ const msgConsumer = async (msgCallback) => {
     const exchange  = process.env.RABBITMQ_EXCHANGE;
 
     await channel.assertExchange(exchange, 'fanout', { durable: false });
-    await channel.assertQueue("",{ exclusive: false});
-    await channel.bindQueue("", exchange, "");
+    await channel.assertQueue("consumer",{ exclusive: false});
+    await channel.bindQueue("consumer", exchange, "");
 
-    await channel.consume("", message => {
+    await channel.consume("consumer", message => {
         let msg = JSON.parse(message.content);
 
         console.log(`Received: ${msg} `);
